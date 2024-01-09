@@ -19,7 +19,7 @@ from fairseq import metrics
 from fairseq.tasks import register_task
 
 from tasks.base_task import BaseTask, BaseConfig, load_bert_pretrained_weights
-from data.refcoco_dataset import RefcocoDataset
+from data.regional_dataset import RefcocoDataset
 from data.file_dataset import FileDataset
 
 logger = logging.getLogger(__name__)

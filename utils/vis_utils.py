@@ -12,7 +12,7 @@ def overlay_predictions(img, mask=None, polygons=None, bbox=None):
     return overlayed
 
 
-def overlay_davis(image, mask, colors=[[0, 0, 0], [255, 102, 102]], cscale=1, alpha=0.4):
+def overlay_davis(image, mask, colors=[[0, 0, 0], [255, 102, 102], [72,139,194],[120,28,129],[64,67,153],[107,178,140],[210,179,63],[231,126,49]], cscale=1, alpha=0.4):
     from scipy.ndimage.morphology import binary_dilation
 
     colors = np.reshape(colors, (-1, 3))
@@ -20,6 +20,7 @@ def overlay_davis(image, mask, colors=[[0, 0, 0], [255, 102, 102]], cscale=1, al
 
     im_overlay = image.copy()
     object_ids = np.unique(mask)
+    print(object_ids)
 
     h_i, w_i = image.shape[0:2]
     h_m, w_m = mask.shape[0:2]

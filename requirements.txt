@@ -1,3 +1,4 @@
+cython
 -e ./fairseq/
 opencv-python
 timm
@@ -12,3 +13,5 @@ rouge_score
 tokenizers
 scikit-image
 tensorboard
+pydicom
+torch==1.13.1

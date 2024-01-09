@@ -170,7 +170,7 @@ def cli_main():
     parser.add_argument("--zero-shot", action='store_true')
     parser.add_argument("--vis_dir", type=str, default=None)
     parser.add_argument("--result_dir", type=str, default=None)
-    parser.add_argument("--vis", action='store_true', default=False)
+    parser.add_argument("--vis", action='store_true', default=True)
     args = options.parse_args_and_arch(parser)
     cfg = convert_namespace_to_omegaconf(args)
     if args.result_dir is None:

@@ -94,8 +94,8 @@ class RefcocoDataset(BaseDataset):
             train = False
 
         # load image and segmentation labels
-        _, clss = uniq_id.split("_")
-        clss = int(clss)
+        #_, clss = uniq_id.split("_")
+        #clss = int(clss)
         image = dicom.dcmread(path_dcm).pixel_array
         """image = np.load(path_dcm)['mask_2d']
         imgr = image.copy()
@@ -108,7 +108,7 @@ class RefcocoDataset(BaseDataset):
         img3 = np.dstack([imgr,imgg,imgb])"""
 
         label = np.load(path_label)["label"]
-        label[label!=clss]=0
+        label[label!=0]=1
         img3 = np.repeat(image[..., np.newaxis], 3, axis=-1)
         image = Image.fromarray(np.uint8(img3))
         label = cv2.resize(label, [self.patch_image_size, self.patch_image_size], interpolation=cv2.INTER_NEAREST)
@@ -120,14 +120,7 @@ class RefcocoDataset(BaseDataset):
         patch_mask = torch.tensor([True])
 
         if train:
-            prob = np.random.uniform()
-            if prob < 0.5:
-                polygons_interpolated = string_to_polygons(poly_interpolated)
-                ds_rate = np.random.randint(1, 8)
-                polygons_augmented = downsample_polygons(polygons_interpolated, ds_rate)
-                poly = polygons_to_string(polygons_augmented)
-            else:
-                poly = poly_original
+            poly = poly_original
 
         polygons = string_to_polygons(poly)
         polygons_scaled = []

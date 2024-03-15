@@ -9,7 +9,7 @@ from PIL import Image
 import cv2
 import math
 from skimage import draw
-
+from data.poly_utils import process_polygons
 
 tasks.register_task('refcoco', RefcocoTask)
 
@@ -21,7 +21,7 @@ use_fp16 = True
 # Load pretrained ckpt & config
 overrides={"bpe_dir":"utils/BPE"}
 models, cfg, task = load_model_ensemble_and_task(
-        utils.split_paths('weights/polyformer_l_refcocog.pt'),
+        utils.split_paths('/home/shreya/scratch/Regional/polygon-transformer/polyformer_b_checkpoints/100_5e-5_512_20240121021434_mask/checkpoint_best.pt'),
         arg_overrides=overrides
     )
 
@@ -187,6 +187,7 @@ def draw_bbox(img, box, color=(0, 255, 0), thickness=2):
     return cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), color, thickness=thickness)
 
 def plot_polygons(img, polygons, color=(255, 0, 0), radius=7):
+    polygons = process_polygons(polygons)
     for polygon in polygons:
         if len(polygon) > 0:
             polygon = np.reshape(polygon[:len(polygon)-len(polygon)%2], (len(polygon)//2, 2)).astype(np.int16)
@@ -296,6 +297,7 @@ def visual_grounding(image, text):
             attn_arrays = np.mean(attn_arrays, 0)
             attn_arrays = attn_arrays[i, :256].reshape(16, 16)
             h, w = image.size
+            print(h,w)
             attn_mask = cv2.resize(attn_arrays.astype(np.float32), (h, w))
             attn_masks.append(attn_mask)
             

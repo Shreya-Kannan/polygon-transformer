@@ -132,14 +132,17 @@ def image_to_base64(img, format):
 def process_polygons(polygons, redirection=True, reorder=True, close=False):
     polygons_processed = []
     for polygon in polygons:
+        polygon = polygon.tolist()
         if redirection and not is_clockwise(polygon):
             polygon = revert_direction(polygon)
         if reorder:
             polygon = reorder_points(polygon)
         if close:
             polygon = close_polygon_contour(polygon)
+        polygon = np.array(polygon)
         polygons_processed.append(polygon)
     polygons = sorted(polygons_processed, key=lambda x: (x[0] ** 2 + x[1] ** 2, x[0], x[1]))
+    print(polygons)
     return polygons
 
 

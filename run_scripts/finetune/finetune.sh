@@ -5,6 +5,7 @@ cls_weight=0.0005
 num_bins=64
 log_dir=/home/shreya/scratch/Regional/polygon-transformer/polyformer_b_logs
 save_dir=/home/shreya/scratch/Regional/polygon-transformer/polyformer_b_checkpoints
+NOW=$(date '+%Y%m%d%H%M%S')
 mkdir -p $log_dir $save_dir
 
 bpe_dir=/home/shreya/scratch/Regional/polygon-transformer/utils/BPE
@@ -12,9 +13,10 @@ user_dir=/home/shreya/scratch/Regional/polygon-transformer/polyformer_module
 
 data_dir=/home/shreya/scratch/Regional/polygon-transformer/datasets/finetune
 #data=${data_dir}/refcoco+g_train_shuffled.tsv,${data_dir}/refcoco/refcoco_val.tsv
-data=${data_dir}/Regional_train.tsv,${data_dir}/Regional_val.tsv
+data=${data_dir}/Regional_sorted_train.tsv,${data_dir}/Regional_sorted_val.tsv
 selected_cols=0,5,6,2,4,3,7
 restore_file=/home/shreya/scratch/Regional/polygon-transformer/weights/polyformer_b_refcoco.pt
+#restore_file=/home/shreya/scratch/Regional/polygon-transformer/weights/polyformer_b_refcoco.pt
 
 
 task=refcoco
@@ -22,7 +24,7 @@ arch=polyformer_b
 criterion=adjust_label_smoothed_cross_entropy
 label_smoothing=0.1
 lr=5e-5
-max_epoch=100
+max_epoch=500
 warmup_ratio=0.06
 batch_size=16
 update_freq=8
@@ -36,19 +38,23 @@ max_tgt_length=420
 
 patch_image_size=512
 
-log_file=${log_dir}/${max_epoch}"_"${lr}"_"${patch_image_size}".log"
-save_path=${save_dir}/${max_epoch}"_"${lr}"_"${patch_image_size}
+#log_file=${log_dir}/${max_epoch}"_"${lr}"_"${patch_image_size}".log"
+#save_path=${save_dir}/${max_epoch}"_"${lr}"_"${patch_image_size}
+
+log_file=${log_dir}/${max_epoch}"_"${lr}"_"${patch_image_size}"_"${NOW}"_sorted.log"
+save_path=${save_dir}/${max_epoch}"_"${lr}"_"${patch_image_size}"_"${NOW}"_sorted"
+
 mkdir -p $save_path
 
-for max_epoch in 100; do
+for max_epoch in 500; do
   echo "max_epoch "${max_epoch}
   for lr in 5e-5; do
     echo "lr "${lr}
     for patch_image_size in 512; do
       echo "patch_image_size "${patch_image_size}
 
-      log_file=${log_dir}/${max_epoch}"_"${lr}"_"${patch_image_size}".log"
-      save_path=${save_dir}/${max_epoch}"_"${lr}"_"${patch_image_size}
+      log_file=${log_dir}/${max_epoch}"_"${lr}"_"${patch_image_size}"_"${NOW}"_sorted.log"
+      save_path=${save_dir}/${max_epoch}"_"${lr}"_"${patch_image_size}"_"${NOW}"_sorted"
       mkdir -p $save_path
 
       CUDA_VISIBLE_DEVICES=0 python3 -m torch.distributed.launch --nproc_per_node=1 --master_port=${MASTER_PORT} /home/shreya/scratch/Regional/polygon-transformer/train.py \

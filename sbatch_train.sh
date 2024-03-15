@@ -4,11 +4,12 @@
 #SBATCH --nodes=2
 #SBATCH --ntasks=16
 #SBATCH --mem=32G
-#SBATCH --time=48:00:00
+#SBATCH --time=40:00:00
 #SBATCH --mail-user=skannan3@ualberta.ca
 #SBATCH --mail-type=ALL
 
-module load gcc/9.3.0 arrow/8 python/3.10.2
+#module load gcc/9.3.0 arrow/8 python/3.10.2
+module load gcc python arrow
 module load opencv
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate

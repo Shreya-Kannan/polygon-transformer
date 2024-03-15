@@ -15,16 +15,19 @@ selected_cols=0,5,6,2,4,3
 model='polyformer_b'
 num_bins=64
 batch_size=16
-epoch=100
-
+epoch=300
+NOW=$(date '+%Y%m%d%H%M%S')
 
 dataset='regional'
-split='test'
-ckpt_path=/home/shreya/scratch/Regional/polygon-transformer/polyformer_b_checkpoints/100_5e-5_512/checkpoint_best.pt
-data=/home/shreya/scratch/Regional/polygon-transformer/datasets/finetune/Regional_test.tsv
+split='traint'
+#ckpt_path=/home/shreya/scratch/Regional/polygon-transformer/polyformer_b_checkpoints/100_5e-5_512/checkpoint_best.pt
+#ckpt_path=/home/shreya/scratch/Regional/polygon-transformer/polyformer_b_checkpoints/100_5e-5_512_20240121021434/checkpoint_best.pt
+#ckpt_path=/home/shreya/scratch/Regional/polygon-transformer/polyformer_b_checkpoints/500_5e-5_512_20240228153222_small1/checkpoint_best.pt
+ckpt_path=/home/shreya/scratch/Regional/polygon-transformer/polyformer_b_checkpoints/500_5e-5_512_20240313024409_sorted/checkpoint_best.pt
+data=/home/shreya/scratch/Regional/polygon-transformer/datasets/finetune/Regional_sorted_train.tsv
 result_path=/home/shreya/scratch/Regional/polygon-transformer/results_${model}/${dataset}/epoch_${epoch}
-vis_dir=${result_path}/vis/${split}
-result_dir=${result_path}/result/${split}
+vis_dir=${result_path}/vis/${split}"_"${NOW}_"small1"
+result_dir=${result_path}/result/${split}"_"${NOW}_"small1"
 
 python3 -m torch.distributed.launch --nproc_per_node=${GPUS_PER_NODE} --master_port=${MASTER_PORT} /home/shreya/scratch/Regional/polygon-transformer/evaluate.py \
     ${data} \
